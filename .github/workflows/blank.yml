@@ -1,15 +1,9 @@
 name: Run
 
-# on:
-#   push:
-#     branches:
-#       - main
-#   schedule:
-#     - cron: '6 10 * * *'  # 在UTC时间上午10点6分运行
-
 on:
-  workflow_dispatch:  # 手动触发
-
+  schedule:
+    # 设置定时任务，每天UTC时间上午5点执行，等价于北京时间下午13点
+    - cron: '0 5 * * *'  
 
 jobs:
   build:
@@ -26,6 +20,13 @@ jobs:
 
     - name: Install dependencies
       run: pip install -r requirements.txt  # 根据你的需求修改 requirements.txt 文件路径
+
+    - name: Add random delay
+      run: |
+        # 生成一个 0 到 120 秒之间的随机延迟
+        RANDOM_DELAY=$((RANDOM % 121))
+        echo "Sleeping for ${RANDOM_DELAY} seconds..."
+        sleep ${RANDOM_DELAY}
 
     - name: Run
       env:
