@@ -45,10 +45,19 @@ def modify_steps(account, password, min_steps, max_steps, attempts=3, timeout=20
 def main():
     min_steps = 19875
     max_steps = 48750
+    successful_modifications = 0  # 统计成功修改的次数
 
     for account, password in account_password_pairs:
         result = modify_steps(account, password, min_steps, max_steps)
         print(result)
+        if "修改成功" in result:  # 如果修改成功，增加计数
+            successful_modifications += 1
+
+    # 最后发送成功修改的通知
+    if successful_modifications > 0:
+        send_telegram_message(f"<b>Steps_modifier</b>\n\n已成功修改 {successful_modifications} 个账号的步数，请查看！")
+    else:
+        send_telegram_message("<b>Steps_modifier</b>\n\n没有成功修改任何账号的步数。")
 
 if __name__ == "__main__":
     main()
