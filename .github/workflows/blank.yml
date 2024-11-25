@@ -1,52 +1,35 @@
-name: Run
-
 on:
   schedule:
-    # 设置定时任务，每天UTC时间上午5点执行，等价于北京时间下午13点
-    - cron: '0 5 * * *'  
+    - cron: '0 5 * * *'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs - on: ubuntu - latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup - python@v4
       with:
-        python-version: '3.x'  # 选择所需的 Python 版本
+        python - version: '3.x'
+
+    - name: Install timeout (if needed)
+      run: sudo apt - y install coreutils
+
+    - name: Random Delay
+      run: |
+        delay=$((RANDOM % 120))
+        echo "Delaying for $delay seconds"
+        timeout $delay sleep 1
 
     - name: Install dependencies
-      run: pip install -r requirements.txt  # 根据你的需求修改 requirements.txt 文件路径
-
-    - name: Add random delay
-      run: |
-        # 生成一个 0 到 120 秒之间的随机延迟
-        RANDOM_DELAY=$((RANDOM % 121))
-        echo "Sleeping for ${RANDOM_DELAY} seconds..."
-        sleep ${RANDOM_DELAY}
+      run: pip install - r requirements.txt
 
     - name: Run
       env:
         TELEGRAM_API_TOKEN: ${{ secrets.TELEGRAM_API_TOKEN }}
         TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         ACCOUNTS_AND_PASSWORDS: ${{ secrets.ACCOUNTS_AND_PASSWORDS }}
-      run: |
-        python steps.py
-
-    - name: Get number of modified files
-      id: changes
-      run: |
-        CHANGES=$(git diff --name-only HEAD^ HEAD)
-        CHANGES_COUNT=$(echo "$CHANGES" | wc -l)
-        echo "Number of modified files: $CHANGES_COUNT"
-        echo "MODIFIED_FILES_COUNT=$CHANGES_COUNT" >> $GITHUB_ENV
-
-    - name: Send success notification to Telegram
-      if: success()  # 只有成功时才发送通知
-      run: |
-        curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_API_TOKEN }}/sendMessage" \
-        -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-        -d "text=The scheduled job has been successfully executed. ${MODIFIED_FILES_COUNT} files were modified."
+      run: python steps.py
