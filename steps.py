@@ -55,7 +55,7 @@ def main():
 
     # 最后发送成功修改的通知
     if successful_modifications > 0:
-        send_telegram_message(f"<b>Steps_modifier</b>\n\n已成功修改 {successful_modifications} 个账号的步数，请查看！")
+        send_telegram_message(f"<b>Steps_modifier</b>\n\n已成功，请查看微X！")
     else:
         send_telegram_message("<b>Steps_modifier</b>\n\n没有成功修改任何账号的步数。")
 
