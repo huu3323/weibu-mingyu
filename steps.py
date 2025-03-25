@@ -25,7 +25,7 @@ def send_telegram_message(message):
 def modify_steps(account, password, min_steps, max_steps, attempts=3, timeout=20):
     for _ in range(attempts):
         steps = random.randint(min_steps, max_steps)
-        url = f"https://steps.api.030101.xyz/api?account={account}&password={password}&steps={steps}"
+        url = f"https://steps.8bq.ovh/api?account={account}&password={password}&steps={steps}"
         
         try:
             response = requests.get(url, timeout=timeout)
