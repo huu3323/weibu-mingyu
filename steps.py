@@ -43,8 +43,8 @@ def modify_steps(account, password, min_steps, max_steps, attempts=3, timeout=20
 
 # 主程序
 def main():
-    min_steps = 19875
-    max_steps = 48750
+    min_steps = 17875
+    max_steps = 23042
     successful_modifications = 0  # 统计成功修改的次数
 
     for account, password in account_password_pairs:
